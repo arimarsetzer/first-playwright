@@ -1,10 +1,16 @@
 {
-  "name": "login-app",
+  "name": "automation-exercise-tests",
   "version": "1.0.0",
+  "description": "Playwright tests for automationexercise.com registration",
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
     "@playwright/test": "^1.27.1"
   },
-  "scripts": {}
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui"
+  }
 }

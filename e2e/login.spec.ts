@@ -1,32 +1,33 @@
-import { test } from '@playwright/test';
-import { LoginPage } from '../pages/login-page'
+import { test } from "@playwright/test";
+import { RegistrationPage } from "../pages/login-page";
 
-let loginPage: LoginPage
+let registrationPage: RegistrationPage;
 
-test.beforeEach(async({page})=>{
-  loginPage = new LoginPage(page)
-})
+test.beforeEach(async ({ page }) => {
+  registrationPage = new RegistrationPage(page);
+});
 
-test('Deve logar com sucesso', async ({ page }) => {
-  await loginPage.go()
-  await loginPage.signIn('qa', 'cademy')
-  await loginPage.userLoggedIn()
-})
+test("Register a new user successfully", async ({ page }) => {
+  await registrationPage.goToSignup();
 
-test('senha incorreta', async ({ page }) => {
-  await loginPage.go()
-  await loginPage.signIn('qa', 'cadem')
-  await loginPage.toastMessage('Oops! Credenciais inválidas :(')
-})
+  // Generate unique email for each test run
+  const timestamp = Date.now();
+  const testEmail = `testuser${timestamp}@example.com`;
 
-test('senha obrigatória', async ({ page }) => {
-  await loginPage.go()
-  await loginPage.signInUserOnly('qa')
-  await loginPage.toastMessage('Informe a sua senha secreta!')
-})
+  await registrationPage.fillSignupForm(
+    `Test User ${timestamp}`, // name
+    testEmail, // email
+    "Test@123", // password
+    "Test", // firstName
+    "User", // lastName
+    "123 Test Street", // address
+    "California", // state
+    "Los Angeles", // city
+    "90001", // zipcode
+    "9876543210", // mobile
+  );
 
-test('usuário obrigatório', async ({ page }) => {
-  await loginPage.go()
-  await loginPage.signInPasswordOnly('cademy')
-  await loginPage.toastMessage('Informe o seu nome de usuário!')
-})
+  await registrationPage.submitRegistration();
+  await registrationPage.verifyAccountCreated();
+  await registrationPage.continueAfterRegistration();
+});
